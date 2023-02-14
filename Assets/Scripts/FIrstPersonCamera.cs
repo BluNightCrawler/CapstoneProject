@@ -26,17 +26,28 @@ public class FIrstPersonCamera : MonoBehaviour
     float speed;
     public bool grounded;
     //private bool dbljump = true;
+    public Transform groundCheck;
+    public float groundDistance = .4f;
+    public LayerMask groundMask;
 
 
     // Update is called once per frame
     void Update()
     {
+        grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         LookRotation();
         Movement();
-        ExtraGravity();
+        //ExtraGravity();
         GroundCheck();
         
-        if(grounded || Input.GetButtonDown("Jump"))
+
+        bool jumping = Input.GetButtonDown("Jump");
+
+
+        Debug.Log(grounded);
+        Debug.Log("Jumping: " + Input.GetButtonDown("Jump"));
+
+        if (grounded && jumping)
         {
             Jump();
         }
@@ -93,14 +104,17 @@ public class FIrstPersonCamera : MonoBehaviour
     }
     void GroundCheck()
     {
+       
         RaycastHit groundHit;
+        //grounded = Physics.Raycast(transform.position, -transform.up, out groundHit, 1.25f);
         grounded = Physics.Raycast(transform.position, -transform.up, out groundHit, 1.25f);
+        Debug.DrawLine(transform.position, -transform.up, Color.red, 1.25f, false);
         //if (grounded==false)
         //{
         //    dbljump = true;
 
         //}
-       // Debug.Log("You have Landed");
+        Debug.Log("You have Landed");
     }
     void Jump()
     {
